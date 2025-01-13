@@ -4,6 +4,7 @@ import './globals.css'
 import { Sidebar } from '@/_components/sidebar'
 import { Header } from '@/_components/header'
 import { ThemeProvider } from 'next-themes'
+import { FontPreferenceInitializer } from '@/_components/font-preference-initializer'
 
 export const metadata: Metadata = {
   title: {
@@ -20,8 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="light" data-font="sans" suppressHydrationWarning>
+      <FontPreferenceInitializer />
+
       <body
-        className={`${inter.variable} ${notoSerif.variable} ${sourceCodePro.variable} h-screen antialiased`}
+        className={`${inter.variable} ${notoSerif.variable} ${sourceCodePro.variable} h-screen overflow-hidden antialiased`}
       >
         <ThemeProvider
           storageKey="taking-note@theme"

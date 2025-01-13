@@ -1,8 +1,6 @@
 import type { ComponentProps } from 'react'
 import { twMerge } from 'tailwind-merge'
 
-interface ThemeOptionProps extends ComponentProps<'input'> {}
-
 function Root({ className, ...props }: ComponentProps<'label'>) {
   return (
     <label

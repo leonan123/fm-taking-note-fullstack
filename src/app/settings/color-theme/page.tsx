@@ -2,7 +2,7 @@
 
 import { useTheme } from 'next-themes'
 import { useEffect, useState, type FormEvent } from 'react'
-import * as ThemeOption from './_components/theme-option'
+import * as ThemeOption from '../_components/theme-option'
 import { THEME_COLOR_OPTIONS } from '@/_constants/theme'
 
 export default function ColorThemePage() {

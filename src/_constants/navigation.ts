@@ -18,12 +18,12 @@ export const SIDEBAR_NAVIGATION = [
 export const SETTINGS_NAVIGATION = [
   {
     label: 'Color Theme',
-    href: '/color-theme',
+    href: '/settings/color-theme',
     icon: SunIcon,
   },
   {
     label: 'Font Theme',
-    href: '/font-theme',
+    href: '/settings/font-theme',
     icon: TypeIcon,
   },
 ]
