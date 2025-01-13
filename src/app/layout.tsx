@@ -18,12 +18,13 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark" data-font="sans">
+    <html lang="en" className="light" data-font="sans">
       <body
         className={`${inter.variable} ${notoSerif.variable} ${sourceCodePro.variable} h-screen antialiased`}
       >
         <div className="flex h-full">
           <Sidebar />
+
           <div className="flex-1">
             <Header />
             {children}
