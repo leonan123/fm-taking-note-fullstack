@@ -3,6 +3,7 @@ import { inter, notoSerif, sourceCodePro } from '../_layout/theme'
 import './globals.css'
 import { Sidebar } from '@/_components/sidebar'
 import { Header } from '@/_components/header'
+import { ThemeProvider } from 'next-themes'
 
 export const metadata: Metadata = {
   title: {
@@ -18,18 +19,24 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="light" data-font="sans">
+    <html lang="en" className="light" data-font="sans" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${notoSerif.variable} ${sourceCodePro.variable} h-screen antialiased`}
       >
-        <div className="flex h-full">
-          <Sidebar />
+        <ThemeProvider
+          storageKey="taking-note@theme"
+          defaultTheme="system"
+          attribute="class"
+        >
+          <div className="flex h-full">
+            <Sidebar />
 
-          <div className="flex-1">
-            <Header />
-            {children}
+            <div className="flex-1">
+              <Header />
+              {children}
+            </div>
           </div>
-        </div>
+        </ThemeProvider>
       </body>
     </html>
   )

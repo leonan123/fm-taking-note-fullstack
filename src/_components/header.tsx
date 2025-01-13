@@ -46,8 +46,8 @@ export function Header() {
         </form>
 
         <Link
-          href="/settings"
-          data-active={pathname === '/settings'}
+          href="/settings/color-theme"
+          data-active={pathname.startsWith('/settings')}
           className="rounded-lg p-2 text-neutral-500 transition-colors hover:text-neutral-400 data-[active=true]:bg-neutral-300/70 data-[active=true]:text-blue-600 dark:hover:text-neutral-400 dark:data-[active=true]:bg-neutral-800 dark:data-[active=true]:text-blue-600"
         >
           <span className="sr-only">Settings</span>
