@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
 import { inter, notoSerif, sourceCodePro } from '../_layout/theme'
-import './globals.css'
-import { Sidebar } from '@/_components/sidebar'
-import { Header } from '@/_components/header'
 import { ThemeProvider } from 'next-themes'
 import { FontPreferenceInitializer } from '@/_components/font-preference-initializer'
+import { ClerkProvider } from '../_providers/clerk-provider'
+
+import './globals.css'
 
 export const metadata: Metadata = {
   title: {
@@ -31,14 +31,7 @@ export default function RootLayout({
           defaultTheme="system"
           attribute="class"
         >
-          <div className="flex h-full">
-            <Sidebar />
-
-            <div className="flex-1">
-              <Header />
-              {children}
-            </div>
-          </div>
+          <ClerkProvider>{children}</ClerkProvider>
         </ThemeProvider>
       </body>
     </html>
