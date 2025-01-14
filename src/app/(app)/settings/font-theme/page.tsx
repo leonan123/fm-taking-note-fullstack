@@ -3,6 +3,7 @@
 import { THEME_FONT_OPTIONS } from '@/_constants/theme'
 import * as ThemeOption from '../_components/theme-option'
 import { useEffect, useState, type FormEvent } from 'react'
+import { Button } from '@/_components/button'
 
 export default function FontThemePage() {
   const [mounted, setMounted] = useState(false)
@@ -60,9 +61,7 @@ export default function FontThemePage() {
           </ThemeOption.Root>
         ))}
 
-        <button className="h-[41px] self-end rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-700">
-          Apply changes
-        </button>
+        <Button className="w-auto self-end">Apply changes</Button>
       </form>
     </main>
   )

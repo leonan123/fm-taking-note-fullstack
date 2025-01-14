@@ -4,6 +4,7 @@ import { useTheme } from 'next-themes'
 import { useEffect, useState, type FormEvent } from 'react'
 import * as ThemeOption from '../_components/theme-option'
 import { THEME_COLOR_OPTIONS } from '@/_constants/theme'
+import { Button } from '@/_components/button'
 
 export default function ColorThemePage() {
   const { theme, setTheme } = useTheme()
@@ -48,9 +49,7 @@ export default function ColorThemePage() {
           </ThemeOption.Root>
         ))}
 
-        <button className="h-[41px] self-end rounded-lg bg-blue-600 px-4 text-sm font-medium text-white transition-colors hover:bg-blue-700">
-          Apply changes
-        </button>
+        <Button className="w-auto self-end">Apply changes</Button>
       </form>
     </main>
   )

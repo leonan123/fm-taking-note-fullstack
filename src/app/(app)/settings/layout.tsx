@@ -14,7 +14,7 @@ export default function SettingsLayout({
 }) {
   return (
     <div className="flex h-full">
-      <div className="max-w-[258px] border-r border-r-neutral-200 py-5 pl-8 pr-4 dark:border-r-neutral-800">
+      <div className="w-full max-w-[258px] border-r border-r-neutral-200 py-5 pl-8 pr-4 dark:border-r-neutral-800">
         <Navigation
           navigationItems={SETTINGS_NAVIGATION}
           className="mt-0 w-full"
