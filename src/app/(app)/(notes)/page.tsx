@@ -1,19 +1,25 @@
-import { Button } from '@/_components/button'
-import { PlusIcon } from 'lucide-react'
+import { NotesList } from './_components/notes-list'
+import { db } from '@/_lib/prisma'
+import { auth } from '@clerk/nextjs/server'
 
 export const metadata = {
   title: 'All Notes',
 }
 
-export default function Home() {
+export default async function AllNotesPage() {
+  const { userId } = await auth()
+
+  const notes = await db.note.findMany({
+    where: { userId: userId! },
+    include: {
+      tags: true,
+    },
+    orderBy: { createdAt: 'desc' },
+  })
+
   return (
-    <div className="flex h-full">
-      <div className="w-full max-w-[290px] border-r border-r-neutral-200 py-5 pl-8 pr-4 dark:border-r-neutral-800">
-        <Button>
-          <PlusIcon size={16} />
-          Create New Note
-        </Button>
-      </div>
+    <div className="flex flex-1">
+      <NotesList notes={notes} />
     </div>
   )
 }

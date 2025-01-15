@@ -10,7 +10,7 @@ export default function AppLayout({
     <div className="flex h-full">
       <Sidebar />
 
-      <div className="flex-1">
+      <div className="flex flex-1 flex-col">
         <Header />
         {children}
       </div>

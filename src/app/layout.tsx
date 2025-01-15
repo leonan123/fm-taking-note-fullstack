@@ -24,7 +24,7 @@ export default function RootLayout({
       <FontPreferenceInitializer />
 
       <body
-        className={`${inter.variable} ${notoSerif.variable} ${sourceCodePro.variable} h-screen overflow-hidden antialiased`}
+        className={`${inter.variable} ${notoSerif.variable} ${sourceCodePro.variable} flex h-screen flex-col antialiased`}
       >
         <ThemeProvider
           storageKey="taking-note@theme"
