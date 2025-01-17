@@ -1,13 +1,14 @@
 'use client'
 
-import type { Note, Prisma } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { useEffect, useRef, useState } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Button } from '@/_components/button'
 import { ArchiveIcon, PlusIcon, Trash2Icon } from 'lucide-react'
 import { UpsertNoteForm } from './upsert-note-form'
+import { NoteTab } from './notes-tab'
 
-interface NotesListProps {
+export interface NotesListProps {
   notes: Prisma.NoteGetPayload<{
     include: {
       tags: true
@@ -18,7 +19,10 @@ interface NotesListProps {
 export function NotesList({ notes }: NotesListProps) {
   const notesContainer = useRef<HTMLDivElement>(null)
 
+  const [tabValue, setTabValue] = useState('')
   const [isCreatingNewNote, setIsCreatingNewNote] = useState(false)
+  const [creatingNoteTitle, setCreatingNoteTitle] = useState('Untitled Note')
+  const [notesState, setNotesState] = useState<typeof notes>(notes)
 
   useEffect(() => {
     const notesContainerEl = notesContainer.current!
@@ -30,12 +34,28 @@ export function NotesList({ notes }: NotesListProps) {
     }
   }, [])
 
+  useEffect(() => {
+    if (isCreatingNewNote) {
+      setTabValue('new')
+      return
+    }
+  }, [isCreatingNewNote])
+
+  useEffect(() => {
+    setNotesState(notes)
+    setIsCreatingNewNote(false)
+  }, [notes])
+
   function handleCreateNewNote() {
     setIsCreatingNewNote(true)
   }
 
   return (
-    <Tabs.Root className="flex w-full">
+    <Tabs.Root
+      className="flex w-full"
+      value={tabValue}
+      onValueChange={setTabValue}
+    >
       <div className="h-full w-full max-w-[290px] border-r border-r-neutral-200 py-5 pl-8 pr-4 dark:border-r-neutral-800">
         <Button onClick={handleCreateNewNote}>
           <PlusIcon size={16} />
@@ -46,46 +66,48 @@ export function NotesList({ notes }: NotesListProps) {
           <Tabs.List>
             {isCreatingNewNote && (
               <Tabs.Trigger value="new" asChild>
-                <button className="w-full space-y-3 rounded-md p-2 text-start">
-                  <h3 className="font-semibold">Untitled Note</h3>
+                <button className="w-full space-y-3 rounded-md p-2 text-start data-[state=active]:bg-neutral-300/70 dark:data-[state=active]:bg-neutral-800">
+                  <h3 className="font-semibold">{creatingNoteTitle}</h3>
                 </button>
               </Tabs.Trigger>
             )}
 
-            {notes.map(({ tags, ...note }, i) => (
-              <Tabs.Trigger key={note.id} value={note.id} asChild>
-                <button
-                  className="w-full space-y-3 rounded-md p-2 text-start data-[state=active]:bg-neutral-300/70 dark:data-[state=active]:bg-neutral-800"
-                  onClick={() => setIsCreatingNewNote(false)}
-                >
-                  <h3 className="font-semibold">{note.title}</h3>
-
-                  {tags.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-1">
-                      {tags.map((tag) => (
-                        <div
-                          key={tag.id}
-                          className="inline-block rounded-[4px] bg-gray-300/75 px-1.5 py-0.5 text-xs dark:bg-neutral-700 dark:text-neutral-300"
-                        >
-                          {tag.name}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  <p className="text-xs dark:text-neutral-200">
-                    {note.updatedAt
-                      ? note.updatedAt.toDateString()
-                      : note.createdAt.toDateString()}
-                  </p>
-                </button>
-              </Tabs.Trigger>
+            {notesState.map((note) => (
+              <NoteTab
+                key={note.id}
+                note={note}
+                onClick={() => setIsCreatingNewNote(false)}
+              />
             ))}
           </Tabs.List>
         </div>
       </div>
 
-      {notes.map(({ tags, ...note }, i) => (
+      {isCreatingNewNote && (
+        <Tabs.Content value="new" className="w-full outline-none">
+          <div className="flex h-full">
+            <div className="h-full w-2/3 border-r border-r-neutral-200 dark:border-r-neutral-800">
+              <UpsertNoteForm
+                onTitleChange={(title: string) => setCreatingNoteTitle(title)}
+              />
+            </div>
+
+            <div className="flex-1 space-y-3 px-4 py-5">
+              <Button variant="outline" className="max-w-[242px] justify-start">
+                <ArchiveIcon size={20} />
+                Archive Note
+              </Button>
+
+              <Button variant="outline" className="max-w-[242px] justify-start">
+                <Trash2Icon size={20} />
+                Delete Note
+              </Button>
+            </div>
+          </div>
+        </Tabs.Content>
+      )}
+
+      {notesState.map(({ tags, ...note }, i) => (
         <Tabs.Content
           value={note.id}
           key={note.id}
@@ -93,7 +115,27 @@ export function NotesList({ notes }: NotesListProps) {
         >
           <div className="flex h-full">
             <div className="h-full w-2/3 border-r border-r-neutral-200 dark:border-r-neutral-800">
-              <UpsertNoteForm />
+              <UpsertNoteForm
+                defaultValues={{
+                  ...note,
+                  tags: tags.map((tag) => tag.name).join(', '),
+                  updatedAt: note.updatedAt?.toDateString(),
+                }}
+                onTitleChange={(title: string) => {
+                  setNotesState((prev) =>
+                    prev.map((n) => {
+                      if (n.id === note.id) {
+                        return {
+                          ...n,
+                          title,
+                        }
+                      }
+
+                      return n
+                    }),
+                  )
+                }}
+              />
             </div>
 
             <div className="flex-1 space-y-3 px-4 py-5">

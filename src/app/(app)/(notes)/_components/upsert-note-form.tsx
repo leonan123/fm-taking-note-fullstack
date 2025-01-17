@@ -1,10 +1,74 @@
 import { Button } from '@/_components/button'
 import { ClockIcon, TagIcon } from 'lucide-react'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { upsertNoteAction } from '../_actions'
+import { useAuth } from '@clerk/nextjs'
+import { useEffect } from 'react'
 
-export function UpsertNoteForm() {
+const upsertNoteSchema = z.object({
+  id: z.string().optional(),
+  title: z.string().min(1, { message: 'Title is required' }),
+  tags: z.string().optional(),
+  content: z.string().nullable(),
+  updatedAt: z.string().optional(),
+})
+
+type UpsertNoteData = z.infer<typeof upsertNoteSchema>
+
+interface UpsertNoteFormProps {
+  defaultValues?: UpsertNoteData & {
+    userId: string
+  }
+  onTitleChange?: (title: string) => void
+}
+
+// TODO: add tags
+export function UpsertNoteForm({
+  defaultValues,
+  onTitleChange,
+}: UpsertNoteFormProps) {
+  const { userId } = useAuth()
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<UpsertNoteData>({
+    resolver: zodResolver(upsertNoteSchema),
+    defaultValues: defaultValues ?? {
+      id: '',
+      title: '',
+      tags: '',
+      content: '',
+    },
+  })
+
+  function onSubmit(data: UpsertNoteData) {
+    upsertNoteAction({ ...data, userId: userId! })
+  }
+
+  const title = watch('title')
+
+  useEffect(() => {
+    if (title.length === 0) {
+      onTitleChange?.('Untitled Note')
+      return
+    }
+
+    onTitleChange?.(title)
+  }, [title])
+
   return (
-    <form action="" className="flex size-full flex-col px-6 py-5">
-      <div>
+    <form
+      className="flex size-full flex-col px-6 py-5"
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <input type="hidden" value={defaultValues?.id} {...register('id')} />
+
+      <div aria-invalid={!!errors.title} className="group">
         <label htmlFor="title" className="sr-only">
           Title
         </label>
@@ -13,7 +77,11 @@ export function UpsertNoteForm() {
           id="title"
           placeholder="Enter a title..."
           className="w-full bg-transparent text-2xl font-bold outline-none"
+          {...register('title')}
         />
+        {errors.title && (
+          <p className="mt-1 text-xs text-red-500">{errors.title.message}</p>
+        )}
       </div>
 
       <div className="mt-5 space-y-2">
@@ -27,18 +95,19 @@ export function UpsertNoteForm() {
           </label>
           <div className="flex-1">
             <input
-              name="tags"
+              id="tags"
               type="text"
               className="w-full bg-transparent text-sm outline-none placeholder:text-neutral-400"
               placeholder="Add tags separated by commas (e.g. Work, Planning)"
               spellCheck={false}
+              {...register('tags')}
             />
           </div>
         </div>
 
         <div className="mt-5 flex items-center gap-2">
           <label
-            htmlFor="tags"
+            htmlFor="updatedAt"
             className="flex w-full max-w-[115px] items-center gap-1.5 text-sm dark:text-neutral-300"
           >
             <ClockIcon size={16} />
@@ -46,12 +115,12 @@ export function UpsertNoteForm() {
           </label>
           <div className="flex-1">
             <input
-              name="tags"
+              id="updatedAt"
               type="text"
               className="w-full bg-transparent text-sm outline-none placeholder:text-neutral-400"
               placeholder="Not yet saved"
-              value=""
               disabled={true}
+              {...register('updatedAt')}
             />
           </div>
         </div>
@@ -65,10 +134,10 @@ export function UpsertNoteForm() {
         </label>
 
         <textarea
-          name="content"
           id="content"
           className="size-full rounded-lg bg-transparent text-sm outline-none placeholder:text-neutral-400"
           placeholder="Start typing your note here…"
+          {...register('content')}
         />
       </div>
 
