@@ -1,16 +1,24 @@
 import { Button } from '@/_components/button'
 import { ClockIcon, TagIcon } from 'lucide-react'
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { upsertNoteAction } from '../_actions'
 import { useAuth } from '@clerk/nextjs'
 import { useEffect } from 'react'
+import { TagInput } from './tag-input'
 
 const upsertNoteSchema = z.object({
   id: z.string().optional(),
   title: z.string().min(1, { message: 'Title is required' }),
-  tags: z.string().optional(),
+  tags: z
+    .array(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+      }),
+    )
+    .optional(),
   content: z.string().nullable(),
   updatedAt: z.string().optional(),
 })
@@ -24,7 +32,6 @@ interface UpsertNoteFormProps {
   onTitleChange?: (title: string) => void
 }
 
-// TODO: add tags
 export function UpsertNoteForm({
   defaultValues,
   onTitleChange,
@@ -35,13 +42,14 @@ export function UpsertNoteForm({
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    control,
+    formState: { errors, ...form },
   } = useForm<UpsertNoteData>({
     resolver: zodResolver(upsertNoteSchema),
     defaultValues: defaultValues ?? {
       id: '',
       title: '',
-      tags: '',
+      tags: [],
       content: '',
     },
   })
@@ -94,13 +102,16 @@ export function UpsertNoteForm({
             Tags
           </label>
           <div className="flex-1">
-            <input
-              id="tags"
-              type="text"
-              className="w-full bg-transparent text-sm outline-none placeholder:text-neutral-400"
-              placeholder="Add tags separated by commas (e.g. Work, Planning)"
-              spellCheck={false}
-              {...register('tags')}
+            <Controller
+              name="tags"
+              control={control}
+              render={({ field: { onChange, value, ...field } }) => (
+                <TagInput
+                  {...field}
+                  selectedTags={value ?? []}
+                  onValueChange={onChange}
+                />
+              )}
             />
           </div>
         </div>

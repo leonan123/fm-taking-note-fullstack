@@ -8,12 +8,12 @@ datasource db {
 }
 
 model Note {
-  id        String    @id @default(uuid())
+  id        String    @id @unique @default(uuid())
   title     String
   content   String?
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
-  userId    String       @map("user_id")
+  userId    String    @map("user_id")
   tags      Tag[]
   NoteTag   NoteTag[]
 
@@ -21,20 +21,22 @@ model Note {
 }
 
 model Tag {
-  id      Int       @id @default(autoincrement())
+  id      Int       @id @unique @default(autoincrement())
   name    String    @unique
-  notes   Note[]
+  userId  String    @map("user_id")
+  noteId  String?
+  Note    Note?     @relation(fields: [noteId], references: [id])
   NoteTag NoteTag[]
 
   @@map("tag")
 }
 
 model NoteTag {
-  noteNoteId String @map("note_id")
-  note       Note   @relation(fields: [noteNoteId], references: [id])
-  tagTagId   Int
-  tag        Tag    @relation(fields: [tagTagId], references: [id])
+  noteId String @map("note_id")
+  note   Note   @relation(fields: [noteId], references: [id])
+  tagId  Int    @map("tag_id")
+  tag    Tag    @relation(fields: [tagId], references: [id])
 
-  @@id(map: "note_tags_id", fields: [noteNoteId, tagTagId])
+  @@id(map: "note_tags_id", fields: [noteId, tagId])
   @@map("note_tag")
 }

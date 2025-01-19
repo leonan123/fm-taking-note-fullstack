@@ -12,14 +12,24 @@ export default async function AllNotesPage() {
   const notes = await db.note.findMany({
     where: { userId: userId! },
     include: {
-      tags: true,
+      NoteTag: {
+        include: {
+          tag: true,
+        },
+      },
     },
     orderBy: { createdAt: 'desc' },
   })
 
+  const parsedNotes = notes.map(({ NoteTag, ...note }) => ({
+    ...note,
+    tags: NoteTag.map((noteTag) => noteTag.tag),
+  }))
+
   return (
     <div className="flex flex-1">
-      <NotesList notes={notes} />
+      {' '}
+      <NotesList notes={parsedNotes} />{' '}
     </div>
   )
 }

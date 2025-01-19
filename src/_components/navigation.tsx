@@ -1,6 +1,6 @@
 'use client'
 
-import { ArchiveIcon, HouseIcon, TagIcon, type LucideIcon } from 'lucide-react'
+import { type LucideIcon } from 'lucide-react'
 import { NavItem } from './nav-item'
 import type { ComponentProps } from 'react'
 import { twMerge } from 'tailwind-merge'

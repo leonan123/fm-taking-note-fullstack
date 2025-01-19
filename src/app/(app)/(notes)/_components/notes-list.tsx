@@ -50,6 +50,30 @@ export function NotesList({ notes }: NotesListProps) {
     setIsCreatingNewNote(true)
   }
 
+  function handleTitleChange(
+    noteId: string,
+    title: string,
+    isCreating: boolean,
+  ) {
+    if (isCreating) {
+      setCreatingNoteTitle(title)
+      return
+    }
+
+    setNotesState((prev) =>
+      prev.map((n) => {
+        if (n.id === noteId) {
+          return {
+            ...n,
+            title,
+          }
+        }
+
+        return n
+      }),
+    )
+  }
+
   return (
     <Tabs.Root
       className="flex w-full"
@@ -62,7 +86,7 @@ export function NotesList({ notes }: NotesListProps) {
           Create New Note
         </Button>
 
-        <div ref={notesContainer} className="mt-4 overflow-scroll">
+        <div ref={notesContainer} className="mt-4 overflow-auto">
           <Tabs.List>
             {isCreatingNewNote && (
               <Tabs.Trigger value="new" asChild>
@@ -88,7 +112,9 @@ export function NotesList({ notes }: NotesListProps) {
           <div className="flex h-full">
             <div className="h-full w-2/3 border-r border-r-neutral-200 dark:border-r-neutral-800">
               <UpsertNoteForm
-                onTitleChange={(title: string) => setCreatingNoteTitle(title)}
+                onTitleChange={(title: string) =>
+                  handleTitleChange('', title, true)
+                }
               />
             </div>
 
@@ -118,23 +144,12 @@ export function NotesList({ notes }: NotesListProps) {
               <UpsertNoteForm
                 defaultValues={{
                   ...note,
-                  tags: tags.map((tag) => tag.name).join(', '),
+                  tags,
                   updatedAt: note.updatedAt?.toDateString(),
                 }}
-                onTitleChange={(title: string) => {
-                  setNotesState((prev) =>
-                    prev.map((n) => {
-                      if (n.id === note.id) {
-                        return {
-                          ...n,
-                          title,
-                        }
-                      }
-
-                      return n
-                    }),
-                  )
-                }}
+                onTitleChange={(title: string) =>
+                  handleTitleChange(note.id, title, false)
+                }
               />
             </div>
 
