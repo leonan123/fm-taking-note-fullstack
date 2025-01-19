@@ -28,8 +28,7 @@ export default async function AllNotesPage() {
 
   return (
     <div className="flex flex-1">
-      {' '}
-      <NotesList notes={parsedNotes} />{' '}
+      <NotesList notes={parsedNotes} />
     </div>
   )
 }

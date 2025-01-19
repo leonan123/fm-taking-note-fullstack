@@ -15,6 +15,7 @@ const button = tv({
       outline: [
         'bg-transparent border border-neutral-300 hover:bg-neutral-200',
         'dark:border-neutral-700 dark:hover:bg-neutral-800',
+        'disabled:border-neutral-300 disabled:opacity-50 disabled:hover:dark:bg-transparent disabled:cursor-not-allowed',
       ],
     },
     size: {
