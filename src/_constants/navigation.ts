@@ -1,29 +1,33 @@
-'use client'
+import { icons } from 'lucide-react'
 
-import { ArchiveIcon, HouseIcon, SunIcon, TypeIcon } from 'lucide-react'
+export type NavigationItem = {
+  label: string
+  href: string
+  icon: keyof typeof icons
+}
 
-export const SIDEBAR_NAVIGATION = [
+export const SIDEBAR_NAVIGATION: NavigationItem[] = [
   {
     label: 'All Notes',
     href: '/',
-    icon: HouseIcon,
+    icon: 'House',
   },
   {
     label: 'Archived Notes',
     href: '/archived',
-    icon: ArchiveIcon,
+    icon: 'Archive',
   },
 ]
 
-export const SETTINGS_NAVIGATION = [
+export const SETTINGS_NAVIGATION: NavigationItem[] = [
   {
     label: 'Color Theme',
     href: '/settings/color-theme',
-    icon: SunIcon,
+    icon: 'Sun',
   },
   {
     label: 'Font Theme',
     href: '/settings/font-theme',
-    icon: TypeIcon,
+    icon: 'Type',
   },
 ]

@@ -1,18 +1,30 @@
-'use client'
-
 import Link from 'next/link'
 import { Logo } from './logo'
 import { Navigation } from './navigation'
-import { SIDEBAR_NAVIGATION } from '@/_constants/navigation'
-import { TagIcon } from 'lucide-react'
+import {
+  SIDEBAR_NAVIGATION,
+  type NavigationItem,
+} from '@/_constants/navigation'
+import { db } from '@/_lib/prisma'
+import { auth } from '@clerk/nextjs/server'
 
-const TAGS = Array.from({ length: 5 }).map((_, i) => ({
-  label: `Tag ${i + 1}`,
-  href: `/tag/${i + 1}`,
-  icon: TagIcon,
-}))
+export async function Sidebar() {
+  const { userId } = await auth()
 
-export function Sidebar() {
+  if (!userId) return null
+
+  const tags = await db.tag.findMany({
+    where: {
+      userId,
+    },
+  })
+
+  const TAGS: NavigationItem[] = tags.map((tag) => ({
+    label: tag.name,
+    href: `/tag/${tag.id}`,
+    icon: 'Tag',
+  }))
+
   return (
     <div className="w-[272px] border-r border-r-neutral-200 px-4 py-3 dark:border-r-neutral-800">
       <div className="py-3">

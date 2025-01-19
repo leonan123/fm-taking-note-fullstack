@@ -1,16 +1,10 @@
-'use client'
-
-import { type LucideIcon } from 'lucide-react'
 import { NavItem } from './nav-item'
 import type { ComponentProps } from 'react'
 import { twMerge } from 'tailwind-merge'
+import type { NavigationItem } from '@/_constants/navigation'
 
 interface NavigationProps extends ComponentProps<'nav'> {
-  navigationItems: {
-    label: string
-    href: string
-    icon: LucideIcon
-  }[]
+  navigationItems: NavigationItem[]
 }
 
 export function Navigation({ navigationItems, className }: NavigationProps) {
