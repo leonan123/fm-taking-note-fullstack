@@ -1,13 +1,11 @@
-import type { Prisma } from '@prisma/client'
+import type { Note, Tag } from '@prisma/client'
 import { TabsTrigger } from '@radix-ui/react-tabs'
 import type { ComponentProps } from 'react'
 
 interface NoteTabProps extends ComponentProps<'button'> {
-  note: Prisma.NoteGetPayload<{
-    include: {
-      tags: true
-    }
-  }>
+  note: Note & {
+    tags: Tag[]
+  }
 }
 
 export function NoteTab({ note, ...props }: NoteTabProps) {

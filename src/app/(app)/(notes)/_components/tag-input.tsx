@@ -1,7 +1,7 @@
 'use client'
 
 import { Command } from 'cmdk'
-import { useEffect, useRef, type KeyboardEvent } from 'react'
+import { useRef, type KeyboardEvent } from 'react'
 import * as Popover from '@radix-ui/react-popover'
 import { SearchIcon, XCircleIcon } from 'lucide-react'
 import { useTagInput, type Tag } from '../_hooks/use-tag-input'

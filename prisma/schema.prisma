@@ -14,7 +14,6 @@ model Note {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime? @updatedAt @map("updated_at")
   userId    String    @map("user_id")
-  tags      Tag[]
   NoteTag   NoteTag[]
 
   @@map("note")
@@ -24,8 +23,6 @@ model Tag {
   id      Int       @id @unique @default(autoincrement())
   name    String    @unique
   userId  String    @map("user_id")
-  noteId  String?
-  Note    Note?     @relation(fields: [noteId], references: [id])
   NoteTag NoteTag[]
 
   @@map("tag")
@@ -33,9 +30,9 @@ model Tag {
 
 model NoteTag {
   noteId String @map("note_id")
-  note   Note   @relation(fields: [noteId], references: [id])
+  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
   tagId  Int    @map("tag_id")
-  tag    Tag    @relation(fields: [tagId], references: [id])
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
 
   @@id(map: "note_tags_id", fields: [noteId, tagId])
   @@map("note_tag")

@@ -1,12 +1,13 @@
-import type { Prisma } from '@prisma/client'
+import type { Note, Tag } from '@prisma/client'
 import { useEffect, useState } from 'react'
+import { deleteNoteAction } from '../_actions'
 
 interface UseNotesListProps {
-  notes: Prisma.NoteGetPayload<{
-    include: {
-      tags: true
+  notes: Array<
+    Note & {
+      tags: Tag[]
     }
-  }>[]
+  >
 }
 
 export function useNotesList({ notes }: UseNotesListProps) {
@@ -26,6 +27,10 @@ export function useNotesList({ notes }: UseNotesListProps) {
     }
 
     setTabValue(tabName)
+  }
+
+  async function handleDeleteClick(noteId: string) {
+    await deleteNoteAction(noteId)
   }
 
   function handleTitleChange(
@@ -65,5 +70,6 @@ export function useNotesList({ notes }: UseNotesListProps) {
     handleTabChange,
     handleCreateNewNote,
     handleTitleChange,
+    handleDeleteClick,
   }
 }

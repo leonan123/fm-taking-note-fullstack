@@ -1,7 +1,7 @@
 'use client'
 
-import type { Prisma } from '@prisma/client'
-import { useEffect, useRef, useState } from 'react'
+import type { Note, Tag } from '@prisma/client'
+import { useEffect, useRef } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
 import { Button } from '@/_components/button'
 import { ArchiveIcon, PlusIcon, Trash2Icon } from 'lucide-react'
@@ -10,11 +10,11 @@ import { NoteTab } from './notes-tab'
 import { useNotesList } from '../_hooks/use-notes-list'
 
 export interface NotesListProps {
-  notes: Prisma.NoteGetPayload<{
-    include: {
-      tags: true
+  notes: Array<
+    Note & {
+      tags: Tag[]
     }
-  }>[]
+  >
 }
 
 export function NotesList({ notes }: NotesListProps) {
@@ -28,6 +28,7 @@ export function NotesList({ notes }: NotesListProps) {
     handleCreateNewNote,
     handleTitleChange,
     handleTabChange,
+    handleDeleteClick,
   } = useNotesList({ notes })
 
   useEffect(() => {
@@ -105,7 +106,7 @@ export function NotesList({ notes }: NotesListProps) {
         </Tabs.Content>
       )}
 
-      {notesState.map(({ tags, ...note }, i) => (
+      {notesState.map(({ ...note }, i) => (
         <Tabs.Content
           value={note.id}
           key={note.id}
@@ -116,7 +117,6 @@ export function NotesList({ notes }: NotesListProps) {
               <UpsertNoteForm
                 defaultValues={{
                   ...note,
-                  tags,
                   updatedAt: note.updatedAt?.toDateString(),
                 }}
                 onTitleChange={(title: string) =>
@@ -131,7 +131,11 @@ export function NotesList({ notes }: NotesListProps) {
                 Archive Note
               </Button>
 
-              <Button variant="outline" className="max-w-[242px] justify-start">
+              <Button
+                variant="outline"
+                className="max-w-[242px] justify-start"
+                onClick={() => handleDeleteClick(note.id)}
+              >
                 <Trash2Icon size={20} />
                 Delete Note
               </Button>

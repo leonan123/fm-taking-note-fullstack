@@ -45,6 +45,11 @@ export async function upsertNoteAction(data: createNoteAction) {
   revalidatePath('/')
 }
 
+export async function deleteNoteAction(noteId: string) {
+  await db.note.delete({ where: { id: noteId } })
+  revalidatePath('/')
+}
+
 export async function createTagAction(tag: string, userId: string) {
   const newTag = await db.tag.create({
     data: {
