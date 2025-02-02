@@ -3,7 +3,7 @@ import { twMerge } from 'tailwind-merge'
 import { tv, type VariantProps } from 'tailwind-variants'
 
 const button = tv({
-  base: 'flex w-full items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors',
+  base: 'flex w-full items-center justify-center gap-2 rounded-lg text-sm font-medium transition-colors text-nowrap',
 
   variants: {
     variant: {
@@ -17,6 +17,7 @@ const button = tv({
         'dark:border-neutral-700 dark:hover:bg-neutral-800',
         'disabled:border-neutral-300 disabled:opacity-50 disabled:hover:dark:bg-transparent disabled:cursor-not-allowed',
       ],
+      destructive: ['bg-red-700 hover:bg-red-800 text-neutral-50'],
     },
     size: {
       md: 'h-10 px-4',

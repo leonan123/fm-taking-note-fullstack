@@ -3,11 +3,16 @@
 import type { Note, Tag } from '@prisma/client'
 import { useEffect, useRef } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
+import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { Button } from '@/_components/button'
-import { ArchiveIcon, PlusIcon, Trash2Icon } from 'lucide-react'
+import { ArchiveIcon, PlusIcon, Trash2Icon, TrashIcon } from 'lucide-react'
 import { UpsertNoteForm } from './upsert-note-form'
 import { NoteTab } from './notes-tab'
 import { useNotesList } from '../_hooks/use-notes-list'
+import { usePathname } from 'next/navigation'
+import { ArchiveNoteButton } from './archive-note-button'
+import { DeleteNoteButton } from '@/app/(app)/(notes)/_components/delete-note-button'
+import { UnarchiveNoteButton } from './unarchive-note-button'
 
 export interface NotesListProps {
   notes: Array<
@@ -20,6 +25,8 @@ export interface NotesListProps {
 export function NotesList({ notes }: NotesListProps) {
   const notesContainer = useRef<HTMLDivElement>(null)
 
+  const isArchivedPage = usePathname().endsWith('/archived')
+
   const {
     tabValue,
     notesState,
@@ -28,7 +35,7 @@ export function NotesList({ notes }: NotesListProps) {
     handleCreateNewNote,
     handleTitleChange,
     handleTabChange,
-    handleDeleteClick,
+    handleCancelClick,
   } = useNotesList({ notes })
 
   useEffect(() => {
@@ -48,7 +55,11 @@ export function NotesList({ notes }: NotesListProps) {
       onValueChange={handleTabChange}
     >
       <div className="h-full w-full max-w-[290px] border-r border-r-neutral-200 py-5 pl-8 pr-4 dark:border-r-neutral-800">
-        <Button onClick={handleCreateNewNote}>
+        <Button
+          data-hidden={isArchivedPage}
+          onClick={handleCreateNewNote}
+          className="data-[hidden=true]:hidden"
+        >
           <PlusIcon size={16} />
           Create New Note
         </Button>
@@ -66,6 +77,12 @@ export function NotesList({ notes }: NotesListProps) {
             {notesState.map((note) => (
               <NoteTab key={note.id} note={note} />
             ))}
+
+            {notesState.length === 0 && (
+              <div className="w-full space-y-3 rounded-md p-2 text-start">
+                <h3 className="font-semibold">No notes found.</h3>
+              </div>
+            )}
           </Tabs.List>
         </div>
       </div>
@@ -75,8 +92,9 @@ export function NotesList({ notes }: NotesListProps) {
           <div className="flex h-full">
             <div className="h-full w-2/3 border-r border-r-neutral-200 dark:border-r-neutral-800">
               <UpsertNoteForm
+                onCancelClick={handleCancelClick}
                 onTitleChange={(title: string) =>
-                  handleTitleChange('', title, true)
+                  handleTitleChange({ title, isCreating: true })
                 }
               />
             </div>
@@ -119,26 +137,25 @@ export function NotesList({ notes }: NotesListProps) {
                   ...note,
                   updatedAt: note.updatedAt?.toDateString(),
                 }}
+                onCancelClick={handleCancelClick}
                 onTitleChange={(title: string) =>
-                  handleTitleChange(note.id, title, false)
+                  handleTitleChange({
+                    title,
+                    noteId: note.id,
+                    isCreating: false,
+                  })
                 }
               />
             </div>
 
             <div className="flex-1 space-y-3 px-4 py-5">
-              <Button variant="outline" className="max-w-[242px] justify-start">
-                <ArchiveIcon size={20} />
-                Archive Note
-              </Button>
+              {note.isArchived ? (
+                <UnarchiveNoteButton noteId={note.id} />
+              ) : (
+                <ArchiveNoteButton noteId={note.id} />
+              )}
 
-              <Button
-                variant="outline"
-                className="max-w-[242px] justify-start"
-                onClick={() => handleDeleteClick(note.id)}
-              >
-                <Trash2Icon size={20} />
-                Delete Note
-              </Button>
+              <DeleteNoteButton noteId={note.id} />
             </div>
           </div>
         </Tabs.Content>

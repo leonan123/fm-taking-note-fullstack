@@ -50,6 +50,28 @@ export async function deleteNoteAction(noteId: string) {
   revalidatePath('/')
 }
 
+export async function archiveNoteAction(noteId: string) {
+  await db.note.update({
+    where: { id: noteId },
+    data: {
+      isArchived: true,
+    },
+  })
+
+  revalidatePath('/')
+}
+
+export async function unarchiveNoteAction(noteId: string) {
+  await db.note.update({
+    where: { id: noteId },
+    data: {
+      isArchived: false,
+    },
+  })
+
+  revalidatePath('/')
+}
+
 export async function createTagAction(tag: string, userId: string) {
   const newTag = await db.tag.create({
     data: {

@@ -7,6 +7,7 @@ import { upsertNoteAction } from '../_actions'
 import { useAuth } from '@clerk/nextjs'
 import { useEffect } from 'react'
 import { TagInput } from './tag-input'
+import { toast } from 'sonner'
 
 const upsertNoteSchema = z.object({
   id: z.string().optional(),
@@ -30,11 +31,13 @@ interface UpsertNoteFormProps {
     userId: string
   }
   onTitleChange?: (title: string) => void
+  onCancelClick?: () => void
 }
 
 export function UpsertNoteForm({
   defaultValues,
   onTitleChange,
+  onCancelClick,
 }: UpsertNoteFormProps) {
   const { userId } = useAuth()
 
@@ -56,6 +59,7 @@ export function UpsertNoteForm({
 
   function onSubmit(data: UpsertNoteData) {
     upsertNoteAction({ ...data, userId: userId! })
+    toast.success('Note saved successfully!')
   }
 
   const title = watch('title')
@@ -158,7 +162,7 @@ export function UpsertNoteForm({
         <Button type="submit" className="text-nowrap">
           Save Note
         </Button>
-        <Button type="button" variant="secondary">
+        <Button type="button" variant="secondary" onClick={onCancelClick}>
           Cancel
         </Button>
       </div>

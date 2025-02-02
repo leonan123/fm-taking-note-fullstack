@@ -1,6 +1,5 @@
 import type { Note, Tag } from '@prisma/client'
 import { useEffect, useState } from 'react'
-import { deleteNoteAction } from '../_actions'
 
 interface UseNotesListProps {
   notes: Array<
@@ -8,6 +7,12 @@ interface UseNotesListProps {
       tags: Tag[]
     }
   >
+}
+
+interface HandleTitleChange {
+  noteId?: string
+  title: string
+  isCreating: boolean
 }
 
 export function useNotesList({ notes }: UseNotesListProps) {
@@ -29,15 +34,7 @@ export function useNotesList({ notes }: UseNotesListProps) {
     setTabValue(tabName)
   }
 
-  async function handleDeleteClick(noteId: string) {
-    await deleteNoteAction(noteId)
-  }
-
-  function handleTitleChange(
-    noteId: string,
-    title: string,
-    isCreating: boolean,
-  ) {
+  function handleTitleChange({ noteId, title, isCreating }: HandleTitleChange) {
     if (isCreating) {
       setCreatingNoteTitle(title)
       return
@@ -57,6 +54,11 @@ export function useNotesList({ notes }: UseNotesListProps) {
     )
   }
 
+  function handleCancelClick() {
+    setIsCreatingNewNote(false)
+    setTabValue('')
+  }
+
   useEffect(() => {
     setNotesState(notes)
     setIsCreatingNewNote(false)
@@ -70,6 +72,6 @@ export function useNotesList({ notes }: UseNotesListProps) {
     handleTabChange,
     handleCreateNewNote,
     handleTitleChange,
-    handleDeleteClick,
+    handleCancelClick,
   }
 }

@@ -10,7 +10,7 @@ export default async function AllNotesPage() {
   const { userId } = await auth()
 
   const notes = await db.note.findMany({
-    where: { userId: userId! },
+    where: { userId: userId!, isArchived: false },
     include: {
       NoteTag: {
         include: {
