@@ -10,6 +10,7 @@ import { useAuth } from '@clerk/nextjs'
 import { useEffect } from 'react'
 import { TagInput } from './tag-input'
 import { toast } from 'sonner'
+import { Editor } from '@/_components/editor'
 
 const upsertNoteSchema = z.object({
   id: z.string().optional(),
@@ -48,7 +49,6 @@ export function UpsertNoteForm({
     handleSubmit,
     watch,
     control,
-    setValue,
     formState: { errors, ...form },
   } = useForm<UpsertNoteData>({
     resolver: zodResolver(upsertNoteSchema),
@@ -60,9 +60,8 @@ export function UpsertNoteForm({
     },
   })
 
-  console.log({ defaultValues })
-
   function onSubmit(data: UpsertNoteData) {
+    console.log(data)
     upsertNoteAction({ ...data, userId: userId! })
     toast.success('Note saved successfully!')
   }
@@ -73,6 +72,9 @@ export function UpsertNoteForm({
     onTitleChange?.(title ? title : 'Untitled Note')
   }, [title])
 
+  console.log(errors)
+  const content = watch('content')
+  console.log(content)
   return (
     <form
       className="flex size-full flex-col px-6 py-5"
@@ -148,11 +150,18 @@ export function UpsertNoteForm({
           Content
         </label>
 
-        <textarea
+        {/* <textarea
           id="content"
           className="size-full rounded-lg bg-transparent text-sm outline-none placeholder:text-neutral-400"
           placeholder="Start typing your note here…"
           {...register('content')}
+        /> */}
+        <Controller
+          name="content"
+          control={control}
+          render={({ field: { onChange, value, ...field } }) => (
+            <Editor onValueChange={onChange} content={value ?? ''} {...field} />
+          )}
         />
       </div>
 
