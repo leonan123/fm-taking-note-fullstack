@@ -61,7 +61,6 @@ export function UpsertNoteForm({
   })
 
   function onSubmit(data: UpsertNoteData) {
-    console.log(data)
     upsertNoteAction({ ...data, userId: userId! })
     toast.success('Note saved successfully!')
   }
@@ -72,9 +71,6 @@ export function UpsertNoteForm({
     onTitleChange?.(title ? title : 'Untitled Note')
   }, [title])
 
-  console.log(errors)
-  const content = watch('content')
-  console.log(content)
   return (
     <form
       className="flex size-full flex-col px-6 py-5"
