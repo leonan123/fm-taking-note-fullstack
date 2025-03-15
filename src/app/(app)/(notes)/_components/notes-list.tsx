@@ -3,7 +3,6 @@
 import type { Note, Tag } from '@prisma/client'
 import { useEffect, useRef } from 'react'
 import * as Tabs from '@radix-ui/react-tabs'
-import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { Button } from '@/_components/button'
 import { ArchiveIcon, PlusIcon, Trash2Icon, TrashIcon } from 'lucide-react'
 import { UpsertNoteForm } from './upsert-note-form'

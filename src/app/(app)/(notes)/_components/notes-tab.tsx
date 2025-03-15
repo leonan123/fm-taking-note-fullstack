@@ -31,9 +31,15 @@ export function NoteTab({ note, ...props }: NoteTabProps) {
         )}
 
         <p className="text-xs dark:text-neutral-200">
-          {note.updatedAt
-            ? note.updatedAt.toDateString()
-            : note.createdAt.toDateString()}
+          {new Date(note.updatedAt || note.createdAt).toLocaleDateString(
+            'en-US',
+            {
+              month: 'short',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+            },
+          )}
         </p>
       </button>
     </TabsTrigger>

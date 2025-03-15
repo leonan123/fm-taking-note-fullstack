@@ -1,4 +1,5 @@
-import { NavItem } from './nav-item'
+// import { NavItem } from './nav-item'
+import * as NavItem from './nav-item'
 import type { ComponentProps } from 'react'
 import { twMerge } from 'tailwind-merge'
 import type { NavigationItem } from '@/_constants/navigation'
@@ -12,12 +13,10 @@ export function Navigation({ navigationItems, className }: NavigationProps) {
     <nav className={twMerge('mt-4', className)}>
       <ul className="space-y-1">
         {navigationItems.map((item) => (
-          <NavItem
-            key={item.label}
-            label={item.label}
-            icon={item.icon}
-            href={item.href}
-          />
+          <NavItem.Root key={item.href} href={item.href}>
+            <NavItem.Icon name={item.icon} />
+            <NavItem.Label>{item.label}</NavItem.Label>
+          </NavItem.Root>
         ))}
       </ul>
     </nav>

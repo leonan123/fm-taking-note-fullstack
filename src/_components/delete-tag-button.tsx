@@ -1,39 +1,32 @@
-import { Button } from '@/_components/button'
-import * as AlertDialog from '@radix-ui/react-alert-dialog'
-import { RefreshCcwIcon } from 'lucide-react'
-import { unarchiveNoteAction } from '../_actions'
-import { toast } from 'sonner'
-import Link from 'next/link'
+'use client'
 
-interface UnarchiveNoteButtonProps {
-  noteId: string
+import { LoaderIcon, Trash2Icon } from 'lucide-react'
+import * as AlertDialog from '@radix-ui/react-alert-dialog'
+import { Button } from './button'
+import { useTransition } from 'react'
+import { deleteTagAction } from '@/_actions/tag'
+
+interface DeleteTagButtonProps {
+  tagId: number
+  tagName: string
 }
 
-export function UnarchiveNoteButton({ noteId }: UnarchiveNoteButtonProps) {
-  function handleUnarchiveNoteClick() {
-    unarchiveNoteAction(noteId)
-    toast.success('Note unarchived successfully!', {
-      description: () => {
-        return (
-          <span className="text-xs text-neutral-300">
-            You can find it in the{' '}
-            <Link href="/" className="underline">
-              All Notes
-            </Link>{' '}
-            section.
-          </span>
-        )
-      },
+export function DeleteTagButton({ tagId, tagName }: DeleteTagButtonProps) {
+  const [isPending, startTransition] = useTransition()
+
+  function handleDeleteTagClick() {
+    startTransition(() => {
+      deleteTagAction(tagId)
     })
   }
 
   return (
     <AlertDialog.Root>
       <AlertDialog.Trigger asChild>
-        <Button variant="outline" className="max-w-[242px] justify-start">
-          <RefreshCcwIcon size={20} />
-          Restore Note
-        </Button>
+        <button className="absolute right-3 top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100">
+          <Trash2Icon size={16} />
+          <span className="sr-only">Delete note</span>
+        </button>
       </AlertDialog.Trigger>
 
       <AlertDialog.Portal>
@@ -42,17 +35,17 @@ export function UnarchiveNoteButton({ noteId }: UnarchiveNoteButtonProps) {
         <AlertDialog.Content className="fixed left-1/2 top-1/2 max-h-[85vh] w-full max-w-md -translate-x-1/2 -translate-y-1/2 rounded-xl border border-neutral-200 bg-neutral-50 data-[state=closed]:animate-hide-dialog data-[state=open]:animate-show-dialog dark:border-neutral-600 dark:bg-neutral-800">
           <div className="flex gap-4 p-5">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-neutral-200 dark:bg-neutral-600">
-              <RefreshCcwIcon size={22} />
+              <Trash2Icon size={22} />
             </div>
 
             <div className="space-y-1.5">
               <AlertDialog.Title className="font-semibold leading-none">
-                Restore Note
+                Delete Tag
               </AlertDialog.Title>
 
               <AlertDialog.Description className="text-sm text-neutral-700 dark:text-neutral-300">
-                Are you sure you want to restore this note? You can find it in
-                the All Notes section.
+                Are you sure you want to permanently delete this tag{' '}
+                <strong>{tagName}</strong> ? This action cannot be undone.
               </AlertDialog.Description>
             </div>
           </div>
@@ -67,8 +60,16 @@ export function UnarchiveNoteButton({ noteId }: UnarchiveNoteButtonProps) {
               </Button>
             </AlertDialog.Cancel>
             <AlertDialog.Action asChild>
-              <Button className="max-w-fit" onClick={handleUnarchiveNoteClick}>
-                Restore Note
+              <Button
+                variant="destructive"
+                className="max-w-fit"
+                disabled={isPending}
+                onClick={handleDeleteTagClick}
+              >
+                {isPending && (
+                  <LoaderIcon size={20} className="mr-2 animate-spin" />
+                )}
+                Delete Tag
               </Button>
             </AlertDialog.Action>
           </div>

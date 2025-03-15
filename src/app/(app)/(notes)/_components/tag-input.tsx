@@ -72,10 +72,10 @@ export function TagInput({
 
       <Popover.Content align="start" sideOffset={5}>
         <Command
-          className="rounded-md bg-neutral-800 text-sm font-medium shadow-md"
+          className="rounded-md border border-neutral-300 bg-neutral-50 text-sm font-medium shadow-md dark:border-neutral-700 dark:bg-neutral-800"
           id="command-tag"
         >
-          <div className="flex items-center gap-2 border-b border-b-neutral-700 px-3 py-2">
+          <div className="flex items-center gap-2 border-b border-b-neutral-300 px-3 py-2 dark:border-b-neutral-700">
             <SearchIcon size={16} className="text-neutral-400" />
             <Command.Input
               placeholder="Search..."
@@ -103,7 +103,7 @@ export function TagInput({
             {tags.map((tag) => (
               <Command.Item
                 key={tag.id}
-                className="cursor-pointer rounded-md bg-transparent px-3 py-1.5 transition-colors hover:bg-neutral-700 data-[selected=true]:bg-neutral-700"
+                className="cursor-pointer rounded-md bg-transparent px-3 py-1.5 transition-colors hover:bg-neutral-300 dark:hover:bg-neutral-700 dark:data-[selected=true]:bg-neutral-700"
                 onSelect={() => handleSelectTag(tag)}
               >
                 {tag.name}

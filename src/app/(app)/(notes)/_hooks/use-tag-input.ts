@@ -1,4 +1,4 @@
-import { getTags } from '@/http/get-tags'
+import { getTags } from '@/_http/get-tags'
 import { useAuth } from '@clerk/nextjs'
 import { useEffect, useState } from 'react'
 import { createTagAction } from '../_actions'

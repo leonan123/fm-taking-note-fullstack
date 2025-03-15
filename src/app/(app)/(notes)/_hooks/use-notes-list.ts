@@ -32,6 +32,7 @@ export function useNotesList({ notes }: UseNotesListProps) {
     }
 
     setTabValue(tabName)
+    setNotesState(notes)
   }
 
   function handleTitleChange({ noteId, title, isCreating }: HandleTitleChange) {
@@ -57,6 +58,7 @@ export function useNotesList({ notes }: UseNotesListProps) {
   function handleCancelClick() {
     setIsCreatingNewNote(false)
     setTabValue('')
+    setNotesState(notes)
   }
 
   useEffect(() => {

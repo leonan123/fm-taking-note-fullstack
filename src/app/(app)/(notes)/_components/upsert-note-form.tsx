@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@/_components/button'
 import { ClockIcon, TagIcon } from 'lucide-react'
 import { z } from 'zod'
@@ -46,6 +48,7 @@ export function UpsertNoteForm({
     handleSubmit,
     watch,
     control,
+    setValue,
     formState: { errors, ...form },
   } = useForm<UpsertNoteData>({
     resolver: zodResolver(upsertNoteSchema),
@@ -57,6 +60,8 @@ export function UpsertNoteForm({
     },
   })
 
+  console.log({ defaultValues })
+
   function onSubmit(data: UpsertNoteData) {
     upsertNoteAction({ ...data, userId: userId! })
     toast.success('Note saved successfully!')
@@ -65,12 +70,7 @@ export function UpsertNoteForm({
   const title = watch('title')
 
   useEffect(() => {
-    if (title.length === 0) {
-      onTitleChange?.('Untitled Note')
-      return
-    }
-
-    onTitleChange?.(title)
+    onTitleChange?.(title ? title : 'Untitled Note')
   }, [title])
 
   return (
