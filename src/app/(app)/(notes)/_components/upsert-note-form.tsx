@@ -49,7 +49,7 @@ export function UpsertNoteForm({
     handleSubmit,
     watch,
     control,
-    formState: { errors, ...form },
+    formState: { errors },
   } = useForm<UpsertNoteData>({
     resolver: zodResolver(upsertNoteSchema),
     defaultValues: defaultValues ?? {
@@ -146,12 +146,6 @@ export function UpsertNoteForm({
           Content
         </label>
 
-        {/* <textarea
-          id="content"
-          className="size-full rounded-lg bg-transparent text-sm outline-none placeholder:text-neutral-400"
-          placeholder="Start typing your note here…"
-          {...register('content')}
-        /> */}
         <Controller
           name="content"
           control={control}
