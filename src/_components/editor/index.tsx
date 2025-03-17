@@ -194,7 +194,7 @@ export function Editor({ onValueChange, content, ...props }: EditorProps) {
 
           <BubbleMenu
             editor={editor}
-            className="flex items-center divide-x divide-neutral-700 overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50 shadow-xl dark:border-neutral-700 dark:bg-neutral-800"
+            className="divide-x-400 flex items-center divide-x overflow-hidden rounded-lg border border-neutral-200 bg-neutral-50 shadow-xl dark:divide-neutral-700 dark:border-neutral-700 dark:bg-neutral-800"
             tippyOptions={{
               placement: 'bottom-start',
             }}

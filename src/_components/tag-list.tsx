@@ -17,6 +17,7 @@ export async function TagList() {
     label: tag.name,
     href: `/tag/${tag.name}`,
     icon: 'Tag',
+    id: tag.id,
   }))
 
   return (
@@ -29,10 +30,7 @@ export async function TagList() {
               <NavItem.Label>{tag.label}</NavItem.Label>
             </NavItem.Root>
 
-            <DeleteTagButton
-              tagId={Number(tag.href.split('/').pop()!)}
-              tagName={tag.label}
-            />
+            <DeleteTagButton tagId={tag.id!} tagName={tag.label} />
           </div>
         ))}
       </ul>

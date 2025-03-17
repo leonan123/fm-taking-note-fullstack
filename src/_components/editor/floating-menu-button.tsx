@@ -36,7 +36,7 @@ export function FloatingMenuButton({
     <button
       onKeyDown={handleKeyDown}
       type="button"
-      className="flex h-8 items-center gap-2 rounded-md px-1.5 text-sm outline-none hover:bg-neutral-700 focus:bg-neutral-700"
+      className="flex h-8 items-center gap-2 rounded-md px-1.5 text-sm outline-none hover:bg-neutral-200 focus:bg-neutral-200 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700"
       {...props}
     />
   )

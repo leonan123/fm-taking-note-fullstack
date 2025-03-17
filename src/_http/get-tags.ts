@@ -1,6 +1,6 @@
 export async function getTags() {
   const response = await fetch('/api/tags', {
-    cache: 'force-cache',
+    cache: 'no-cache',
     next: {
       tags: ['tags'],
     },

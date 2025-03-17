@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { ColorSettingsForm } from '../_components/color-settings-form'
 
 export default function ColorThemePage() {
@@ -8,7 +9,9 @@ export default function ColorThemePage() {
         <p className="text-sm text-neutral-500">Choose your color theme:</p>
       </div>
 
-      <ColorSettingsForm />
+      <Suspense>
+        <ColorSettingsForm />
+      </Suspense>
     </main>
   )
 }

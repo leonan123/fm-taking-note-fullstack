@@ -5,6 +5,7 @@ import * as AlertDialog from '@radix-ui/react-alert-dialog'
 import { Button } from './button'
 import { useTransition } from 'react'
 import { deleteTagAction } from '@/_actions/tag'
+import { redirect, usePathname } from 'next/navigation'
 
 interface DeleteTagButtonProps {
   tagId: number
@@ -13,11 +14,16 @@ interface DeleteTagButtonProps {
 
 export function DeleteTagButton({ tagId, tagName }: DeleteTagButtonProps) {
   const [isPending, startTransition] = useTransition()
+  const pathname = usePathname()
 
   function handleDeleteTagClick() {
     startTransition(() => {
       deleteTagAction(tagId)
     })
+
+    if (pathname.startsWith(`/tag/${tagName}`)) {
+      redirect('/')
+    }
   }
 
   return (

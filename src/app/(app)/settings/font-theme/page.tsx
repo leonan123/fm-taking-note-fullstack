@@ -1,3 +1,4 @@
+import { Suspense } from 'react'
 import { FontSettingsForm } from '../_components/font-settings-form'
 
 export default function FontThemePage() {
@@ -8,7 +9,9 @@ export default function FontThemePage() {
         <p className="text-sm text-neutral-500">Choose your font theme:</p>
       </div>
 
-      <FontSettingsForm />
+      <Suspense>
+        <FontSettingsForm />
+      </Suspense>
     </main>
   )
 }

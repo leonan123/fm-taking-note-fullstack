@@ -1,6 +1,7 @@
 import { Sidebar } from '@/_components/sidebar'
 import { Header } from '@/_components/header'
 import { Toaster } from 'sonner'
+import { Suspense } from 'react'
 
 export default function AppLayout({
   children,
@@ -30,7 +31,9 @@ export default function AppLayout({
       <Sidebar />
 
       <div className="flex flex-1 flex-col">
-        <Header />
+        <Suspense>
+          <Header />
+        </Suspense>
         {children}
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { db } from '@/_lib/prisma'
 import { redirect } from 'next/navigation'
 import { NotesList } from '../../_components/notes-list'
+import { auth } from '@clerk/nextjs/server'
 
 interface TagPageProps {
   params: Promise<{
@@ -18,13 +19,20 @@ export async function generateMetadata({ params }: TagPageProps) {
 
 export default async function TagPage({ params }: TagPageProps) {
   const { slug } = await params
+  const { userId } = await auth()
 
   if (!slug) {
     redirect('/')
   }
 
+  if (!userId) {
+    redirect('/sign-in')
+  }
+
   const notes = await db.note.findMany({
     where: {
+      userId,
+
       NoteTag: {
         some: {
           tag: {

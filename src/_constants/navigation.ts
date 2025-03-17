@@ -1,6 +1,7 @@
 import { icons } from 'lucide-react'
 
 export type NavigationItem = {
+  id?: number
   label: string
   href: string
   icon: keyof typeof icons
