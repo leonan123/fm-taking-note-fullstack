@@ -15,7 +15,7 @@ interface createNoteAction {
 
 export async function upsertNoteAction(data: createNoteAction) {
   const note = await db.note.upsert({
-    where: { id: data.id ?? '' },
+    where: { id: data.id ?? '', userId: data.userId },
     create: {
       title: data.title,
       content: data.content,
@@ -80,7 +80,7 @@ export async function createTagAction(tag: string, userId: string) {
     },
   })
 
-  revalidateTag('tags')
+  revalidateTag('availableTags')
 
   return { newTag }
 }

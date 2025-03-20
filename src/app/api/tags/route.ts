@@ -13,6 +13,10 @@ export async function GET() {
     where: {
       userId,
     },
+    select: {
+      id: true,
+      name: true,
+    },
   })
 
   return Response.json(tags)

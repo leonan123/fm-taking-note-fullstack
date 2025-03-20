@@ -123,7 +123,7 @@ export function NotesList({ notes }: NotesListProps) {
         </Tabs.Content>
       )}
 
-      {notesState.map(({ ...note }, i) => (
+      {notesState.map(({ ...note }) => (
         <Tabs.Content
           value={note.id}
           key={note.id}

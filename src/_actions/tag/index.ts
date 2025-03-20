@@ -14,6 +14,6 @@ export async function deleteTagAction(tagId: number) {
     },
   })
 
-  revalidateTag('tags')
+  revalidateTag('availableTags')
   revalidatePath('/')
 }

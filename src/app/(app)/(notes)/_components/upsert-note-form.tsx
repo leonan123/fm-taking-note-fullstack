@@ -3,7 +3,7 @@
 import { Button } from '@/_components/button'
 import { ClockIcon, TagIcon } from 'lucide-react'
 import { z } from 'zod'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { upsertNoteAction } from '../_actions'
 import { useAuth } from '@clerk/nextjs'
@@ -49,6 +49,7 @@ export function UpsertNoteForm({
     handleSubmit,
     watch,
     control,
+    setValue,
     formState: { errors },
   } = useForm<UpsertNoteData>({
     resolver: zodResolver(upsertNoteSchema),
@@ -61,14 +62,18 @@ export function UpsertNoteForm({
   })
 
   function onSubmit(data: UpsertNoteData) {
-    upsertNoteAction({ ...data, userId: userId! })
-    toast.success('Note saved successfully!')
+    try {
+      upsertNoteAction({ ...data, userId: userId! })
+      toast.success('Note saved successfully!')
+    } catch (error) {
+      toast.error('Something went wrong!')
+    }
   }
 
   const title = watch('title')
 
   useEffect(() => {
-    onTitleChange?.(title ? title : 'Untitled Note')
+    onTitleChange?.(title ?? 'Untitled Note')
   }, [title])
 
   return (
@@ -103,17 +108,20 @@ export function UpsertNoteForm({
             <TagIcon size={16} />
             Tags
           </label>
+
           <div className="flex-1">
             <Controller
               name="tags"
               control={control}
-              render={({ field: { onChange, value, ...field } }) => (
-                <TagInput
-                  {...field}
-                  selectedTags={value ?? []}
-                  onValueChange={onChange}
-                />
-              )}
+              render={({ field: { onChange, value, ...field } }) => {
+                return (
+                  <TagInput
+                    propSelectedTags={value ?? []}
+                    onValueChange={onChange}
+                    {...field}
+                  />
+                )
+              }}
             />
           </div>
         </div>

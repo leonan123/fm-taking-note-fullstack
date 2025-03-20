@@ -32,7 +32,6 @@ export function useNotesList({ notes }: UseNotesListProps) {
     }
 
     setTabValue(tabName)
-    setNotesState(notes)
   }
 
   function handleTitleChange({ noteId, title, isCreating }: HandleTitleChange) {

@@ -7,24 +7,21 @@ import { SearchIcon, XCircleIcon } from 'lucide-react'
 import { useTagInput, type Tag } from '../_hooks/use-tag-input'
 
 interface TagInputProps {
-  selectedTags: Tag[]
+  propSelectedTags: Tag[]
   onValueChange: (value: Tag[]) => void
 }
 
-export function TagInput({
-  onValueChange,
-  selectedTags: propSelectedTags,
-}: TagInputProps) {
+export function TagInput({ onValueChange, propSelectedTags }: TagInputProps) {
   const btnCreateTag = useRef<HTMLButtonElement>(null)
-
+  
   const {
     tags,
     isOpen,
-    setIsOpen,
     selectedTags,
     isResultEmpty,
-    setSearchInputValue,
     searchInputValue,
+    handleSearchTag,
+    handleOpenChange,
     handleSelectTag,
     handleDeleteTag,
     handleCreateTag,
@@ -37,7 +34,7 @@ export function TagInput({
   }
 
   return (
-    <Popover.Root open={isOpen} onOpenChange={setIsOpen}>
+    <Popover.Root open={isOpen} onOpenChange={handleOpenChange}>
       <div className="relative">
         <Popover.Trigger
           className="min-h-4 w-full text-start text-sm outline-none"
@@ -70,9 +67,9 @@ export function TagInput({
         </div>
       </div>
 
-      <Popover.Content align="start" sideOffset={5}>
+      <Popover.Content align="start" sideOffset={5} className="z-10">
         <Command
-          className="rounded-md border border-neutral-300 bg-neutral-50 text-sm font-medium shadow-md dark:border-neutral-700 dark:bg-neutral-800"
+          className="z-10 rounded-md border border-neutral-300 bg-neutral-50 text-sm font-medium shadow-md dark:border-neutral-700 dark:bg-neutral-800"
           id="command-tag"
         >
           <div className="flex items-center gap-2 border-b border-b-neutral-300 px-3 py-2 dark:border-b-neutral-700">
@@ -81,7 +78,7 @@ export function TagInput({
               placeholder="Search..."
               className="bg-transparent text-sm outline-none"
               value={searchInputValue}
-              onValueChange={setSearchInputValue}
+              onValueChange={handleSearchTag}
               onKeyDown={handleSearchKeyDown}
             />
           </div>

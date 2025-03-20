@@ -31,6 +31,8 @@ export function useTagInput({
   }
 
   async function handleCreateTag(tagName: string) {
+    if (tagName.length === 0) return
+
     const { newTag } = await createTagAction(tagName, userId!)
 
     setTags((prevTags) => [...prevTags, newTag])
@@ -52,6 +54,21 @@ export function useTagInput({
 
     setSearchInputValue('')
     setIsOpen(false)
+  }
+
+  function handleSearchTag(searchTerm: string) {
+    setSearchInputValue(searchTerm)
+  }
+
+  function handleOpenChange(isOpen: boolean) {
+    const fetchTags = async () => {
+      const { tags } = await getTags()
+
+      setTags(tags)
+    }
+
+    fetchTags()
+    setIsOpen(isOpen)
   }
 
   useEffect(() => {
@@ -82,11 +99,11 @@ export function useTagInput({
   return {
     tags,
     isOpen,
-    setIsOpen,
     searchInputValue,
-    setSearchInputValue,
     selectedTags,
     isResultEmpty,
+    handleOpenChange,
+    handleSearchTag,
     handleDeleteTag,
     handleCreateTag,
     handleSelectTag,
